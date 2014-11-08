@@ -21,8 +21,10 @@
         box.aex.position = v
         box.aex.setModelView()
         this.boxes.push(box)
-        box.aex.uniforms.color = c
-        box.color = c
+        if (c != undefined) {
+          box.aex.uniforms.color = c
+          box.color = c
+        }
         this.object.add(box.aex)
         this.reparent()
     }
@@ -64,8 +66,12 @@
 				var colors = objectData.data.color
 				for(var i in o){
 					var io = o[i]
-					var cc = colors[i]
-					bs.add(new Vector(io.x,io.y,io.z),cc)
+          if (colors == undefined)
+            bs.add(new Vector(io.x,io.y,io.z))
+          else {
+            var cc = colors[i]
+            bs.add(new Vector(io.x,io.y,io.z),cc)
+          }
 				}
 				bs.isLoaded = true
 				callback(bs)
