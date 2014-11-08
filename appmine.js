@@ -68,7 +68,7 @@ window.setup = function () {
 			}
 		}
 	}
-  
+
     agl.init();
     camera.position = new Vector(1.5,1.5,2.0);
     camera.rotation = new Vector(33.0,-33.0, 0);
@@ -100,9 +100,9 @@ gObject = {}
 }
 LoadObjects = function(objectList)
 {
-objectList.push({go:LoadObject("Data/tree",new Vector(2.0,0.5,0.0)),})
-objectList.push({go:LoadObject("Data/island1",new Vector(-5,0.0,0.0)),})
-objectList.push({go:LoadObject("Data/island2",new Vector(2.0,0.0,0.0)),})
+objectList.push(LoadObject("Data/tree",new Vector(2.0,0.5,0.0)))
+objectList.push(LoadObject("Data/island1",new Vector(-5,0.0,0.0)))
+objectList.push(LoadObject("Data/island2",new Vector(2.0,0.0,0.0)))
 }
 
 testPointCollision = function(boundingBox, point) {
@@ -152,7 +152,7 @@ window.logic = function () {
   objectList.forEach(function(object, index, array){
     updateAi(object, timeDiff);
   })
-		
+
 		performGravity()
 }
 window.draw = function () {
