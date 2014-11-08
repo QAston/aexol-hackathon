@@ -16,7 +16,7 @@
                 }
         return this
     }
-    BoxSolver.prototype.add = function(v){
+    BoxSolver.prototype.add = function(v,c){
         var box = new BoxCraft()
         box.aex.position = v
         box.aex.setModelView()
