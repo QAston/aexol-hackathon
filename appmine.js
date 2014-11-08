@@ -1,10 +1,11 @@
-var world, camera, gamePaused, jump,boxes,pointerBox, zajac,calyzajac,calyzajacMove;
+var world, camera, gamePaused = true, jump,boxes,pointerBox, zajac,calyzajac,calyzajacMove, objectList, lastTime;
 var pause = function () {
     gamePaused = !gamePaused
 }
+
 window.setup = function () {
     setGL("agl");
-    gamePaused = false
+
     var agl = new aexolGL();
     world = new Scene();
     camera = new Camera(1)
@@ -132,6 +133,12 @@ window.setup = function () {
     camera.on(0.1)
     camera.setScene(world);
     classCreated = false
+    objectList = [];
+    objectList.push({go:zajac,})
+    console.log("SETUP");
+    lastTime = gl.frame;
+    gamePaused = false
+
 }
 
 testPointCollision = function(boundingBox, point) {
@@ -158,27 +165,19 @@ performGravity = function() {
 }
 
 window.logic = function () {
-    if (!gamePaused) {
-    	// Zając stoi
-    	if(zajac.loaded == 6){
-    		if(!classCreated){
-    			classCreated = true
-    		}
-    		if(zajac.stan == "stoi"){
-    			zajac.glowa.object.rotate(Math.sin(gl.frame*0.004)*15,0,1,0)
-    		}
-    		if(zajac.stan == "biegnie"){
-    			zajac.glowa.object.rotate(Math.sin(gl.frame*0.008)*15,1,0,0)
-    		}
-    	}
-    	// Zając stoi
+  if (gamePaused)
+    return;
+  // main game loop
+  var newTime = gl.frame;
+  var timeDiff = newTime-lastTime;
+  lastTime = newTime;
+  objectList.forEach(function(object, index, array){
+    updateAi(object, timeDiff);
+  })
 		
 		performGravity()
-    }
 }
 window.draw = function () {
-    if (!gamePaused) {
-        world.draw(camera);
-    }
+    world.draw(camera);
 }
 glStart(window.setup);
