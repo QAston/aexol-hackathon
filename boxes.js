@@ -1,4 +1,4 @@
-        BoxCraft = function(){
+    BoxCraft = function(){
         this.aex = new Aex()
         this.velocity = new Vector()
     }
@@ -28,24 +28,24 @@
         this.object.add(box.aex)
         this.reparent()
     }
-	
+
 	BoxSolver.prototype.remove = function(v, meshes){
 		for (var i = 0; i < this.boxes.length; i++) {
 			var box = this.boxes[i]
 			//console.log('v' + v.x)
 			//console.log('box' + box.aex.position.x)
-			
-			if(box.aex._position.x == v.x && box.aex.position.y == v.y && box.aex.position.z == v.z ){				
+
+			if(box.aex._position.x == v.x && box.aex.position.y == v.y && box.aex.position.z == v.z ){
 				rem(this.boxes, box)
 				rem(this.object.items, box)
 				box.aex.remove()
 			}
-				
+
 		}
-		
+
 		return this
 	}
-	
+
 	  rem  = function (arr, item) {
       for(var i = arr.length; i--;) {
           if(arr[i] === item) {
@@ -53,7 +53,7 @@
           }
       }
   }
-	
+
     BoxSolver.prototype.addFromCamera = function(v,v2){
         var vn = v2.multiply(Math.PI).divide(180.0)
         vn = vn.add(Math.PI)

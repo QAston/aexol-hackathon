@@ -138,7 +138,7 @@ window.setup = function () {
         if(e.keyCode==112){
             boxes.save()
         }
-		
+
 		if(e.keyCode == 122){
 			console.log("REMOVEBOX")
            boxes = boxes.remove(boxes.start.multiply(oneBoxSize))
