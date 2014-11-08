@@ -83,7 +83,7 @@ window.setup = function () {
     document.addEventListener("keypress",function(e){
          if(e.keyCode==53){
           console.log("ADDBOX")
-            boxes.add(boxes.start.multiply(oneBoxSize))
+            boxes.add(boxes.start.multiply(oneBoxSize),document.getElementById("color").color.rgb)
         }
         if (e.keyCode== 54) {
           if (confirm("Czy chcesz wczytac plik?"))
@@ -95,7 +95,6 @@ window.setup = function () {
         }
         var start = boxes.start
         console.log(e.keyCode)
-
         if(e.keyCode==116){
             start.z += 1
         }
@@ -115,7 +114,7 @@ window.setup = function () {
             start.y -= 1
         }
         if(e.keyCode==112){
-            boxes.save(5)
+            boxes.save()
         }
     })
     camera.position = new Vector(1.5,1.5,2.0);
@@ -149,3 +148,4 @@ clearScreen = function() {
 
 
 glStart(window.setup);
+

@@ -9,18 +9,21 @@
         this.locations = []
     }
     BoxSolver.prototype.reparent = function(parent){
+    	this.parent = parent || this.parent
 		for(var box in this.boxes){
 			var b = this.boxes[box]
-			b.aex.setParent(parent)
+			b.aex.setParent(this.parent)
 		}
     	return this
     }
-    BoxSolver.prototype.add = function(v){
+    BoxSolver.prototype.add = function(v,c){
         var box = new BoxCraft()
         box.aex.position = v
         box.aex.setModelView()
         this.boxes.push(box)
+        box.aex.uniforms.color = c
         this.object.add(box.aex)
+        this.reparent()
     }
     BoxSolver.prototype.addFromCamera = function(v,v2){
         var vn = v2.multiply(Math.PI).divide(180.0)
@@ -43,6 +46,7 @@
         for (var b in this.boxes){
             var box = this.boxes[b]
             dataBox.data.position.push(box.aex.position)
+            dataBox.data.color.push(box.aex.uniforms.color)
         }
         saveObjectOnTheFly(dataBox)
     }
@@ -56,9 +60,11 @@
 				console.log(client.response)
 				var objectData = JSON.parse(client.response);
 				var o = objectData.data.position
+				var colors = objectData.data.color
 				for(var i in o){
 					var io = o[i]
-					bs.add(new Vector(io.x,io.y,io.z))
+					var cc = colors[i]
+					bs.add(new Vector(io.x,io.y,io.z),cc)
 				}
 				bs.isLoaded = true
 				callback(bs)
