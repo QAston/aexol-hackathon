@@ -135,10 +135,33 @@ window.setup = function () {
     classCreated = false
     objectList = [];
     objectList.push({go:zajac,})
+    LoadObjects(objectList);
     console.log("SETUP");
     lastTime = gl.frame;
     gamePaused = false
 
+}
+LoadObject = function(name,position)
+{
+gObject = {}
+    gObject.stan = "ob"
+    gObject.loaded = 0
+        Mesh.obj("cube.obj",function(e){
+        boxMesh = e.scaleUniform(0.1)
+        boxMesh.setParent(mats)
+        BoxSolver.load(name+".json",function(e){
+            gObject["body"] = e.reparent(boxMesh)
+            gObject["body"].object.move(position)
+            gObject.loaded += 1
+        })
+    })
+        return gObject
+}
+LoadObjects = function(objectList)
+{
+objectList.push({go:LoadObject("Data/tree",new Vector(2.0,0.5,0.0)),})
+objectList.push({go:LoadObject("Data/island1",new Vector(-5,0.0,0.0)),})
+objectList.push({go:LoadObject("Data/island2",new Vector(2.0,0.0,0.0)),})
 }
 
 testPointCollision = function(boundingBox, point) {
