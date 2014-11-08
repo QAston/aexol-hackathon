@@ -12,7 +12,7 @@ window.setup = function () {
     shaderdiff2 = basicShader({useLights:true,useDiffuse:true})
     shaderdiff3 = basicShader({useLights:true})
     shaderSky = basicShader({})
-    
+
     lights = new Light([
     {
         lightPosition: new Vector(3.0,4.0,10.0),
@@ -63,7 +63,7 @@ window.setup = function () {
 //    }
 //    boxMesh2.compile()
     // endteren
-    
+
     boxes = new BoxSolver()
 
 	Mesh.obj("cube.obj",function(e){
@@ -101,9 +101,21 @@ window.setup = function () {
     	var newY = 30-Math.floor(e.y/(window.innerHeight/30.0))*2
     	start.x = newX
     	start.y = newY
+      document.getElementById("xpos").value=newX
+      document.getElementById("ypos").value=newY
+      document.getElementById("zpos").value=start.z
     })
+    document.getElementById("xpos").onkeypress = function(e) {
+      start.x = e.target.value;
+    }
+    document.getElementById("ypos").onkeypress = function(e) {
+      start.y = e.target.value;
+    }
+    document.getElementById("zpos").onkeypress  = function(e) {
+      start.z = e.target.value;
+    }
     document.addEventListener("keypress",function(e){
-        
+
         console.log(e.keyCode)
         if(e.keyCode==116){
             start.z += 2
