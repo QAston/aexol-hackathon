@@ -86,10 +86,12 @@ window.setup = function () {
             boxes.add(boxes.start.multiply(oneBoxSize))
         }
         if (e.keyCode== 54) {
-          wczytajObrazek("slon_glowa.json");
+          if (confirm("Czy chcesz wczytac plik?"))
+            wczytajObrazek("slon_glowa.json");
         }
-        if (e.keyCode == 57) {
-          clearScreen()
+        if (e.keyCode == 55) {
+          if (confirm("Czy chcesz wyczyscic ekran?"))
+            clearScreen()
         }
         var start = boxes.start
         console.log(e.keyCode)
