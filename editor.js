@@ -12,7 +12,7 @@ window.setup = function () {
     shaderdiff2 = basicShader({useLights:true,useDiffuse:true})
     shaderdiff3 = basicShader({useLights:true})
     shaderSky = basicShader({})
-
+    
     lights = new Light([
     {
         lightPosition: new Vector(3.0,4.0,10.0),
@@ -63,7 +63,7 @@ window.setup = function () {
 //    }
 //    boxMesh2.compile()
     // endteren
-
+    
     boxes = new BoxSolver()
 
 	Mesh.obj("cube.obj",function(e){
@@ -94,24 +94,34 @@ window.setup = function () {
             clearScreen()
         }
         var start = boxes.start
+    })
+    var start = boxes.start
+    gl.canvas.addEventListener("mousemove",function(e){
+    	var newX = -30+Math.floor(e.x/(window.innerWidth/30.0))*2
+    	var newY = 30-Math.floor(e.y/(window.innerHeight/30.0))*2
+    	start.x = newX
+    	start.y = newY
+    })
+    document.addEventListener("keypress",function(e){
+        
         console.log(e.keyCode)
         if(e.keyCode==116){
-            start.z += 1
+            start.z += 2
         }
         if(e.keyCode==103){
-            start.z -= 1
+            start.z -= 2
         }
         if(e.keyCode==102){
-            start.x -= 1
+            start.x -= 2
         }
         if(e.keyCode==104){
-            start.x += 1
+            start.x += 2
         }
         if(e.keyCode==121){
-            start.y += 1
+            start.y += 2
         }
         if(e.keyCode==114){
-            start.y -= 1
+            start.y -= 2
         }
         if(e.keyCode==112){
             boxes.save()

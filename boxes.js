@@ -21,6 +21,10 @@
         box.aex.position = v
         box.aex.setModelView()
         this.boxes.push(box)
+        if (c != undefined) {
+          box.aex.uniforms.color = c
+          box.color = c
+        }
         this.object.add(box.aex)
         this.reparent()
     }
@@ -71,28 +75,35 @@
         for (var b in this.boxes){
             var box = this.boxes[b]
             dataBox.data.position.push(box.aex.position)
+            dataBox.data.color.push(box.color)
         }
         saveObjectOnTheFly(dataBox)
     }
     BoxSolver.load = function(filePath,callback){
-        var client = new XMLHttpRequest();
-                var bs = new BoxSolver()
-                bs.isLoaded = false
-                client.open('GET', filePath);
-                client.onreadystatechange = function() {
-                        if (client.readyState == 4 && client.status == "200") {
-                                console.log(client.response)
-                                var objectData = JSON.parse(client.response);
-                                var o = objectData.data.position
-                                for(var i in o){
-                                        var io = o[i]
-                                        bs.add(new Vector(io.x,io.y,io.z))
-                                }
-                                bs.isLoaded = true
-                                callback(bs)
-                        }
-                }
-                client.send();
+    	var client = new XMLHttpRequest();
+		var bs = new BoxSolver()
+		bs.isLoaded = false
+		client.open('GET', filePath);
+		client.onreadystatechange = function() {
+			if (client.readyState == 4 && client.status == "200") {
+				console.log(client.response)
+				var objectData = JSON.parse(client.response);
+				var o = objectData.data.position
+				var colors = objectData.data.color
+				for(var i in o){
+					var io = o[i]
+          if (colors == undefined)
+            bs.add(new Vector(io.x,io.y,io.z))
+          else {
+            var cc = colors[i]
+            bs.add(new Vector(io.x,io.y,io.z),cc)
+          }
+				}
+				bs.isLoaded = true
+				callback(bs)
+			}
+		}
+		client.send();
     }
     BoxSolver.prototype.solve = function(){
         for (var b in this.boxes){
