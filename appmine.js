@@ -82,18 +82,19 @@ window.setup = function () {
     gamePaused = false
 
 }
+
 LoadObject = function(name,position)
 {
-gObject = {}
+    gObject = {}
     gObject.stan = "ob"
-    gObject.loaded = 0
+    gObject.enabled = 0
         Mesh.obj("cube.obj",function(e){
         boxMesh = e.scaleUniform(0.1)
         boxMesh.setParent(mats)
         BoxSolver.load(name+".json",function(e){
-            gObject["body"] = e.reparent(boxMesh)
-            gObject["body"].object.move(position)
-            gObject.loaded += 1
+            gObject["mesh"] = e.reparent(boxMesh)
+            gObject["mesh"].object.move(position)
+            gObject.enabled += 1
         })
     })
         return gObject
@@ -120,7 +121,7 @@ testAABBCollision = function(item, camera) {
 }
 
 createCameraAABB = function(camera) {
-	var result = 
+	var result =
 			{max: new Vector(camera.x + 0.05, camera.y + 0.05, camera.z + 0.05),
 			min: new Vector(camera.x - 0.05, camera.y - 0.05, camera.z - 0.05)}
 	return result
@@ -150,6 +151,8 @@ window.logic = function () {
   var timeDiff = newTime-lastTime;
   lastTime = newTime;
   objectList.forEach(function(object, index, array){
+    if (!object.enabled)
+      return;
     updateAi(object, timeDiff);
   })
 
