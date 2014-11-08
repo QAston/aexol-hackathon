@@ -133,6 +133,30 @@ window.setup = function () {
     camera.setScene(world);
     classCreated = false
 }
+
+testPointCollision = function(boundingBox, point) {
+	return point.x < boundingBox.max.x &&
+	point.z < boundingBox.max.z &&
+	point.x > boundingBox.min.x &&
+	point.z > boundingBox.min.z
+}
+
+testFalling = function(cameraPosition) {
+	var result = false;
+	boxMesh.children.forEach(function(item) {
+				if(testPointCollision(item.getAABB(), cameraPosition))
+					result = true;
+			})
+	return !result;
+}
+
+dropVector = new Vector(0,-0.01,0)
+performGravity = function() {
+	if(testFalling(camera.position)) {
+		camera.position = camera.position.add(dropVector);
+	}
+}
+
 window.logic = function () {
     if (!gamePaused) {
     	// Zając stoi
@@ -148,6 +172,8 @@ window.logic = function () {
     		}
     	}
     	// Zając stoi
+		
+		performGravity()
     }
 }
 window.draw = function () {
