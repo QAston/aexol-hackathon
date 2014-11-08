@@ -50,10 +50,6 @@ window.setup = function () {
         color:[0.0,1.0,0.0],specularWeight:0.1,shininess:4.0
     })
     boxes = new BoxSolver()
-	zajac = {}
-	zajac.stan = "stoi"
-	zajac.loaded = 0
-
 	calyzajac = {
 		items:	[]
 	}
@@ -72,61 +68,7 @@ window.setup = function () {
 			}
 		}
 	}
-	Mesh.obj("cube.obj",function(e){
-		boxMesh = e.scaleUniform(0.1)
-		boxMesh.setParent(mats)
-		BoxSolver.load("zajac_glowa.json",function(e){
-			zajac["glowa"] = e.reparent(boxMesh)
-			zajac["glowa"].object.move(new Vector(0.0,0,-0.0))
-			calyzajac.items.push(zajac["glowa"].object)
-			zajac.loaded += 1
-		})
-		BoxSolver.load("zajac_cialo.json",function(e){
-			zajac["cialo"] = e.reparent(boxMesh)
-			zajac["cialo"].object.move(new Vector(0.13,0,-0.23))
-			calyzajac.items.push(zajac["cialo"].object)
-			zajac.loaded += 1
-		})
-		BoxSolver.load("zajac_noga.json",function(e){
-			zajac["noga1"] = e.reparent(boxMesh)
-			zajac["noga1"].object.move(new Vector(0.55,-0.3,-0.1))
-			calyzajac.items.push(zajac["noga1"].object)
-			zajac.loaded += 1
-
-		})
-		BoxSolver.load("zajac_noga.json",function(e){
-			zajac["noga2"] = e.reparent(boxMesh)
-			zajac["noga2"].object.move(new Vector(0.55,-0.3,-0.8))
-			calyzajac.items.push(zajac["noga2"].object)
-			zajac.loaded += 1
-
-		})
-		BoxSolver.load("zajac_noga.json",function(e){
-			zajac["noga3"] = e.reparent(boxMesh)
-			zajac["noga3"].object.move(new Vector(-0.25,-0.3,-0.1))
-			calyzajac.items.push(zajac["noga3"].object)
-			zajac.loaded += 1
-
-		})
-		BoxSolver.load("zajac_noga.json",function(e){
-			zajac["noga4"] = e.reparent(boxMesh)
-			zajac["noga4"].object.move(new Vector(-0.25,-0.3,-0.8))
-			calyzajac.items.push(zajac["noga4"].object)
-			zajac.loaded += 1
-
-		})
-	})
-
-    document.addEventListener("keypress",function(e){
-      var start = boxes.start
-      console.log(e.keyCode)
-      if(e.keyCode==49){
-        zajac.stan = 'biegnie'
-      }
-      if(e.keyCode==50){
-        zajac.stan = 'stoi'
-      }
-    });
+  
     agl.init();
     camera.position = new Vector(1.5,1.5,2.0);
     camera.rotation = new Vector(33.0,-33.0, 0);
@@ -134,7 +76,6 @@ window.setup = function () {
     camera.setScene(world);
     classCreated = false
     objectList = [];
-    objectList.push({go:zajac,})
     LoadObjects(objectList);
     console.log("SETUP");
     lastTime = gl.frame;
