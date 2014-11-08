@@ -141,10 +141,24 @@ testPointCollision = function(boundingBox, point) {
 	point.z > boundingBox.min.z
 }
 
+testAABBCollision = function(item, camera) {
+	return !(item.max.x <  camera.min.x ||
+		item.max.y < camera.min.y ||
+		item.min.x > camera.max.x ||
+		item.min.y > camera.max.y);
+}
+
+createCameraAABB = function(camera) {
+	var result = 
+			{max: new Vector(camera.x + 0.05, camera.y + 0.05, camera.z + 0.05),
+			min: new Vector(camera.x - 0.05, camera.y - 0.05, camera.z - 0.05)}
+	return result
+	}
+
 testFalling = function(cameraPosition) {
 	var result = false;
 	boxMesh.children.forEach(function(item) {
-				if(testPointCollision(item.getAABB(), cameraPosition))
+				if(testAABBCollision(item.aabb, createCameraAABB(cameraPosition)))
 					result = true;
 			})
 	return !result;
