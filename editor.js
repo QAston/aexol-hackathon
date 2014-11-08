@@ -83,37 +83,65 @@ window.setup = function () {
     document.addEventListener("keypress",function(e){
          if(e.keyCode==53){
           console.log("ADDBOX")
-            boxes.add(boxes.start.multiply(oneBoxSize))
+            boxes.add(boxes.start.multiply(oneBoxSize),document.getElementById("color").color.rgb)
         }
         if (e.keyCode== 54) {
-          wczytajObrazek("slon_glowa.json");
+          if (confirm("Czy chcesz wczytac plik?"))
+            wczytajObrazek("slon_glowa.json");
         }
-        if (e.keyCode == 57) {
-          clearScreen()
+        if (e.keyCode == 55) {
+          if (confirm("Czy chcesz wyczyscic ekran?"))
+            clearScreen()
         }
         var start = boxes.start
-        console.log(e.keyCode)
+    })
+    var start = boxes.start
+    gl.canvas.addEventListener("mousemove",function(e){
+    	var newX = -30+Math.floor(e.x/(window.innerWidth/30.0))*2
+    	var newY = 30-Math.floor(e.y/(window.innerHeight/30.0))*2
+    	start.x = newX
+    	start.y = newY
+      document.getElementById("xpos").value=newX
+      document.getElementById("ypos").value=newY
+      document.getElementById("zpos").value=start.z
+    })
+    document.getElementById("xpos").onkeypress = function(e) {
+      start.x = e.target.value;
+    }
+    document.getElementById("ypos").onkeypress = function(e) {
+      start.y = e.target.value;
+    }
+    document.getElementById("zpos").onkeypress  = function(e) {
+      start.z = e.target.value;
+    }
+    document.addEventListener("keypress",function(e){
 
+        console.log(e.keyCode)
         if(e.keyCode==116){
-            start.z += 1
+            start.z += 2
         }
         if(e.keyCode==103){
-            start.z -= 1
+            start.z -= 2
         }
         if(e.keyCode==102){
-            start.x -= 1
+            start.x -= 2
         }
         if(e.keyCode==104){
-            start.x += 1
+            start.x += 2
         }
         if(e.keyCode==121){
-            start.y += 1
+            start.y += 2
         }
         if(e.keyCode==114){
-            start.y -= 1
+            start.y -= 2
         }
         if(e.keyCode==112){
-            boxes.save(5)
+            boxes.save()
+        }
+
+		if(e.keyCode == 122){
+			console.log("REMOVEBOX")
+           boxes = boxes.remove(boxes.start.multiply(oneBoxSize))
         }
     })
     camera.position = new Vector(1.5,1.5,2.0);
@@ -147,3 +175,4 @@ clearScreen = function() {
 
 
 glStart(window.setup);
+

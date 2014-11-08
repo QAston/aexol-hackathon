@@ -7,10 +7,19 @@ html,body,#aGL{
 }
 </style>
 </head>
-<body>
-	<canvas id="agl"></canvas>
+<body style="margin:0px;">
+	<canvas id="agl"  style="height: calc(100% - 30px)"></canvas>
+
+
+	Click here: <input id="color"	 class="color" value="66ff00">
+    X:<input type="text" id="xpos"/>
+    Y:<input type="text" id="ypos"/>
+    Z:<input type="text" id="zpos"/>
+
 <script type="text/javascript" src="all.js"> </script>
-<script type="text/javascript" src="editor_boxes.js"> </script>
+<script type="text/javascript" src="boxes.js"> </script>
 <script type="text/javascript" src="editor.js"> </script>
+	<script type="text/javascript" src="jscolor.js"></script>
+
 </body>
 </html>
