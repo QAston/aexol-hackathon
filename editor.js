@@ -116,6 +116,11 @@ window.setup = function () {
         if(e.keyCode==112){
             boxes.save()
         }
+		
+		if(e.keyCode == 122){
+			console.log("REMOVEBOX")
+           boxes = boxes.remove(boxes.start.multiply(oneBoxSize))
+        }
     })
     camera.position = new Vector(1.5,1.5,2.0);
     camera.rotation = new Vector(33.0,-33.0, 0);
