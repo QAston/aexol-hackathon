@@ -22,6 +22,7 @@
         box.aex.setModelView()
         this.boxes.push(box)
         box.aex.uniforms.color = c
+        box.color = c
         this.object.add(box.aex)
         this.reparent()
     }
@@ -46,7 +47,7 @@
         for (var b in this.boxes){
             var box = this.boxes[b]
             dataBox.data.position.push(box.aex.position)
-            dataBox.data.color.push(box.aex.uniforms.color)
+            dataBox.data.color.push(box.color)
         }
         saveObjectOnTheFly(dataBox)
     }
