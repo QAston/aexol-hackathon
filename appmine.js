@@ -49,32 +49,6 @@ window.setup = function () {
 		camera.yawStep = x;
 		camera.pitchStep = y;
 	})
-    // teren
-    worldboxes = []
-    wSize = 5
-    oneBoxSize = 0.1
-    mats2 = new Material({
-        color:[0.0,1.0,0.0],specularWeight:0.1,shininess:4.0
-    })
-    boxes = new BoxSolver()
-	calyzajac = {
-		items:	[]
-	}
-	calyzajacMove = function(v,r){
-		for(var i in calyzajac.items){
-			calyzajac.items[i].move(v,r)
-			calyzajac.items[i].pivot = calyzajac.items[i].pivot.add(v)
-			for(var d in calyzajac.items[i].items){
-				console.log(calyzajac.items[i].items)
-				if(calyzajac.items[i].items[d].originPosition){
-					calyzajac.items[i].items[d].originPosition = calyzajac.items[i].items[d].originPosition.add(v)
-
-				}else{
-					calyzajac.items[i].items[d].originPosition = v
-				}
-			}
-		}
-	}
 
     agl.init();
     camera.position = new Vector(1.5,1.5,2.0);
@@ -100,10 +74,17 @@ loadObject = function(name,position,rotation)
     gObject.boxSolver.object.move(position)
     gObject.boxSolver.object.pivot = position
     gObject.boxSolver.object.rotate(rotation,0,1,0)
+    gObject.aexGroup = gObject.boxSolver.object
     gObject.enabled += 1
   })
 
   return gObject
+}
+
+loadEnemy = function(name,position,rotation, speed) {
+    var enemy1 = loadObject(name, position, rotation)
+    enemy1.ai = new AI(speed)
+    return enemy1
 }
 loadObjects = function(objectList)
 {
@@ -131,6 +112,8 @@ loadObjects = function(objectList)
     objectList.push(loadObject("Data/island1",new Vector(-6.5,-0.7,7.2),0))
     objectList.push(loadObject("Data/house",new Vector(-5.5,-0.5,7.2),0))
     objectList.push(loadObject("Data/tree",new Vector(-5.5,-0.0,5.6),0))
+    objectList.push(loadEnemy("Data/enemy1",new Vector(2.0,0.5,0.0),90, 1))
+
   })
 }
 
@@ -235,6 +218,7 @@ window.logic = function () {
     if (!object.enabled)
       return;
     updateAi(object, timeDiff);
+    updateMoveAnim(object, timeDiff);
 
   })
 	performGravity()
