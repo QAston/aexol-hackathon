@@ -92,7 +92,7 @@ window.setup = function () {
 
 loadObject = function(name,position,rotation)
 {
-    gObject = {}
+    var gObject = {}
     gObject.stan = "ob"
     gObject.enabled = 0
         Mesh.obj("cube.obj",function(e){
@@ -111,8 +111,26 @@ loadObject = function(name,position,rotation)
 loadObjects = function(objectList)
 {
 objectList.push(loadObject("Data/tree",new Vector(2.0,0.5,0.0),90))
-objectList.push(loadObject("Data/island1",new Vector(-5,0.0,0.0),0))
+objectList.push(loadObject("Data/island1",new Vector(-5,0.5,0.0),0))
 objectList.push(loadObject("Data/island2",new Vector(2.0,0.0,0.0),90))
+objectList.push(loadObject("Data/island2",new Vector(1.0,0.0,-1.0),90))
+objectList.push(loadObject("Data/island2",new Vector(-0.5,0.0,2.0),90))
+objectList.push(loadObject("Data/bridge",new Vector(-0.5,0.0,2.0),0))
+objectList.push(loadObject("Data/island1",new Vector(-5.5,-0.7,3.2),0))
+objectList.push(loadObject("Data/stairs",new Vector(-5.0,-0.5,2.1),-90))
+
+objectList.push(loadObject("Data/bridge",new Vector(-2.2,0.0,2.5),90))
+objectList.push(loadObject("Data/tree",new Vector(1.0,0.5,-1.0),0))
+objectList.push(loadObject("Data/tree",new Vector(1.5,0.5,-1.0),0))
+objectList.push(loadObject("Data/rock_medium",new Vector(0.3,0.2,-1.0),0))
+objectList.push(loadObject("Data/rock_large",new Vector(-5,0.7,-0.5),0))
+objectList.push(loadObject("Data/tree",new Vector(-4,1,-1.0),0))
+
+objectList.push(loadObject("Data/bridge",new Vector(-5.5,-0.7,5.2),0))
+objectList.push(loadObject("Data/island1",new Vector(-5.5,-0.7,7.2),0))
+objectList.push(loadObject("Data/island1",new Vector(-6.5,-0.7,7.2),0))
+objectList.push(loadObject("Data/house",new Vector(-5.5,-0.5,7.2),0))
+objectList.push(loadObject("Data/tree",new Vector(-5.5,-0.0,5.6),0))
 }
 
 testPointCollision = function(boundingBox, point) {
