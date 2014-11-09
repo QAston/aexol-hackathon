@@ -9,7 +9,6 @@ window.setup = function () {
     var agl = new aexolGL();
     world = new Scene();
     camera = new Camera(1)
-    sceneGroup = new Group()
     shaderdiff2 = basicShader({useLights:true,useDiffuse:true})
     shaderdiff3 = basicShader({useLights:true})
     shaderSky = basicShader({})
@@ -92,45 +91,47 @@ window.setup = function () {
 
 loadObject = function(name,position,rotation)
 {
-    var gObject = {}
-    gObject.stan = "ob"
-    gObject.enabled = 0
-        Mesh.obj("cube.obj",function(e){
-        boxMesh = e.scaleUniform(0.1)
-        boxMesh.setParent(mats)
-        BoxSolver.load(name+".json",function(e){
-            gObject["mesh"] = e.reparent(boxMesh)
-            gObject["mesh"].object.move(position)
-            gObject["mesh"].object.pivot = position
-            gObject["mesh"].object.rotate(rotation,0,1,0)
-            gObject.enabled += 1
-        })
-    })
-        return gObject
+  var gObject = {}
+  gObject.stan = "ob"
+  gObject.enabled = 0
+
+  BoxSolver.load(name+".json",function(e){
+    gObject.boxSolver = e.reparent(boxMesh)
+    gObject.boxSolver.object.move(position)
+    gObject.boxSolver.object.pivot = position
+    gObject.boxSolver.object.rotate(rotation,0,1,0)
+    gObject.enabled += 1
+  })
+
+  return gObject
 }
 loadObjects = function(objectList)
 {
-objectList.push(loadObject("Data/tree",new Vector(2.0,0.5,0.0),90))
-objectList.push(loadObject("Data/island1",new Vector(-5,0.5,0.0),0))
-objectList.push(loadObject("Data/island2",new Vector(2.0,0.0,0.0),90))
-objectList.push(loadObject("Data/island2",new Vector(1.0,0.0,-1.0),90))
-objectList.push(loadObject("Data/island2",new Vector(-0.5,0.0,2.0),90))
-objectList.push(loadObject("Data/bridge",new Vector(-0.5,0.0,2.0),0))
-objectList.push(loadObject("Data/island1",new Vector(-5.5,-0.7,3.2),0))
-objectList.push(loadObject("Data/stairs",new Vector(-5.0,-0.5,2.1),-90))
+  Mesh.obj("cube.obj",function(e){
+    boxMesh = e.scaleUniform(0.1)
+    boxMesh.setParent(mats)
+    objectList.push(loadObject("Data/tree",new Vector(2.0,0.5,0.0),90))
+    objectList.push(loadObject("Data/island1",new Vector(-5,0.5,0.0),0))
+    objectList.push(loadObject("Data/island2",new Vector(2.0,0.0,0.0),90))
+    objectList.push(loadObject("Data/island2",new Vector(1.0,0.0,-1.0),90))
+    objectList.push(loadObject("Data/island2",new Vector(-0.5,0.0,2.0),90))
+    objectList.push(loadObject("Data/bridge",new Vector(-0.5,0.0,2.0),0))
+    objectList.push(loadObject("Data/island1",new Vector(-5.5,-0.7,3.2),0))
+    objectList.push(loadObject("Data/stairs",new Vector(-5.0,-0.5,2.1),-90))
 
-objectList.push(loadObject("Data/bridge",new Vector(-2.2,0.0,2.5),90))
-objectList.push(loadObject("Data/tree",new Vector(1.0,0.5,-1.0),0))
-objectList.push(loadObject("Data/tree",new Vector(1.5,0.5,-1.0),0))
-objectList.push(loadObject("Data/rock_medium",new Vector(0.3,0.2,-1.0),0))
-objectList.push(loadObject("Data/rock_large",new Vector(-5,0.7,-0.5),0))
-objectList.push(loadObject("Data/tree",new Vector(-4,1,-1.0),0))
+    objectList.push(loadObject("Data/bridge",new Vector(-2.2,0.0,2.5),90))
+    objectList.push(loadObject("Data/tree",new Vector(1.0,0.5,-1.0),0))
+    objectList.push(loadObject("Data/tree",new Vector(1.5,0.5,-1.0),0))
+    objectList.push(loadObject("Data/rock_medium",new Vector(0.3,0.2,-1.0),0))
+    objectList.push(loadObject("Data/rock_large",new Vector(-5,0.7,-0.5),0))
+    objectList.push(loadObject("Data/tree",new Vector(-4,1,-1.0),0))
 
-objectList.push(loadObject("Data/bridge",new Vector(-5.5,-0.7,5.2),0))
-objectList.push(loadObject("Data/island1",new Vector(-5.5,-0.7,7.2),0))
-objectList.push(loadObject("Data/island1",new Vector(-6.5,-0.7,7.2),0))
-objectList.push(loadObject("Data/house",new Vector(-5.5,-0.5,7.2),0))
-objectList.push(loadObject("Data/tree",new Vector(-5.5,-0.0,5.6),0))
+    objectList.push(loadObject("Data/bridge",new Vector(-5.5,-0.7,5.2),0))
+    objectList.push(loadObject("Data/island1",new Vector(-5.5,-0.7,7.2),0))
+    objectList.push(loadObject("Data/island1",new Vector(-6.5,-0.7,7.2),0))
+    objectList.push(loadObject("Data/house",new Vector(-5.5,-0.5,7.2),0))
+    objectList.push(loadObject("Data/tree",new Vector(-5.5,-0.0,5.6),0))
+  })
 }
 
 testPointCollision = function(boundingBox, point) {
@@ -169,7 +170,7 @@ handleUpKeyboard = function(sign) {
 	if(sign == 83)
 		camera.forwardStep = 0
 	if(sign == 65)
-		camera.sideStep = 0	
+		camera.sideStep = 0
 	if(sign == 68)
 		camera.sideStep = 0;
 }
@@ -187,7 +188,7 @@ testAABBCollision = function(item, camera) {
 
 var cameraWidth = 0.05
 createCameraAABB = function(camera) {
-	var result = 
+	var result =
 			{max: new Vector(camera.x + cameraWidth, camera.y + cameraWidth, camera.z + cameraWidth),
 			min: new Vector(camera.x - cameraWidth, camera.y - cameraWidth, camera.z - cameraWidth)}
 	return result
@@ -231,7 +232,7 @@ window.logic = function () {
 
   })
 
-		performGravity()
+		//performGravity()
 }
 window.draw = function () {
     world.draw(camera);
