@@ -83,14 +83,14 @@ window.setup = function () {
     camera.setScene(world);
     classCreated = false
     objectList = [];
-    LoadObjects(objectList);
+    loadObjects(objectList);
     console.log("SETUP");
     lastTime = gl.frame;
     gamePaused = false
 
 }
 
-LoadObject = function(name,position)
+loadObject = function(name,position,rotation)
 {
     gObject = {}
     gObject.stan = "ob"
@@ -101,16 +101,18 @@ LoadObject = function(name,position)
         BoxSolver.load(name+".json",function(e){
             gObject["mesh"] = e.reparent(boxMesh)
             gObject["mesh"].object.move(position)
+            gObject["mesh"].object.pivot = position
+            gObject["mesh"].object.rotate(rotation,0,1,0)
             gObject.enabled += 1
         })
     })
         return gObject
 }
-LoadObjects = function(objectList)
+loadObjects = function(objectList)
 {
-objectList.push(LoadObject("Data/tree",new Vector(2.0,0.5,0.0)))
-objectList.push(LoadObject("Data/island1",new Vector(-5,0.0,0.0)))
-objectList.push(LoadObject("Data/island2",new Vector(2.0,0.0,0.0)))
+objectList.push(loadObject("Data/tree",new Vector(2.0,0.5,0.0),90))
+objectList.push(loadObject("Data/island1",new Vector(-5,0.0,0.0),0))
+objectList.push(loadObject("Data/island2",new Vector(2.0,0.0,0.0),90))
 }
 
 testPointCollision = function(boundingBox, point) {
@@ -208,6 +210,7 @@ window.logic = function () {
     if (!object.enabled)
       return;
     updateAi(object, timeDiff);
+
   })
 
 		performGravity()
