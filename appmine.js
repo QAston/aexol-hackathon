@@ -1,4 +1,4 @@
-var world, camera, gamePaused = true, jump,boxes,pointerBox,camera, zajac,calyzajac,calyzajacMove, objectList, lastTime,playerTurn;
+var world, camera, gamePaused = true, jump,boxes,pointerBox,camera, zajac,calyzajac,calyzajacMove, objectList, lastTime,playerTurn,info;
 var pause = function () {
     gamePaused = !gamePaused
 }
@@ -87,6 +87,8 @@ window.setup = function () {
     lastTime = gl.frame;
     gamePaused = false
     playerTurn =1
+    info = new Label(world, "W - move forward, A - turn Left, D - turn Right","Helvetica", 120)
+    info.move(new Vector(0,3,0))
 }
 
 loadObject = function(name,position,rotation)
