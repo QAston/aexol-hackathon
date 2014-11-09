@@ -89,7 +89,6 @@ LoadObject = function(name,position)
     gObject.stan = "ob"
     gObject.enabled = 0
         Mesh.obj("cube.obj",function(e){
-        var boxMesh = Mesh.cube().scale(0.1,0.1,0.1)
         boxMesh.setParent(mats)
         BoxSolver.load(name+".json",function(e) {
             gObject["boxSolver"] = e.reparent(boxMesh)
@@ -97,6 +96,7 @@ LoadObject = function(name,position)
             gObject.enabled += 1
             gObject["go"] = new GameObject(world, {
               shader: basicShader({}),
+              material: new Material({color:[0.9,0.91,1.0]}),
               mesh: gObject["mesh"]})
         })
     })
