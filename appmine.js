@@ -1,4 +1,4 @@
-var world, camera, gamePaused = true, jump,boxes,pointerBox,camera, zajac,calyzajac,calyzajacMove, objectList, lastTime;
+var world, camera, gamePaused = true, jump,boxes,pointerBox,camera, zajac,calyzajac,calyzajacMove, objectList, lastTime,playerTurn;
 var pause = function () {
     gamePaused = !gamePaused
 }
@@ -86,7 +86,7 @@ window.setup = function () {
     console.log("SETUP");
     lastTime = gl.frame;
     gamePaused = false
-
+    playerTurn =1
 }
 
 loadObject = function(name,position,rotation)
@@ -151,14 +151,42 @@ moveByVector = function(vector) {
 
 handleDownKeyboard = function(sign) {
 	console.log(sign)
-	if(sign == 119)
-		moveByVector(new Vector(0,0,-0.1))
-	if(sign == 115)
-		moveByVector(new Vector(0,0,0.1))
-	if(sign == 100)
-		moveByVector(new Vector(0.1,0,0))
-	if(sign == 97)
-		moveByVector(new Vector(-0.1,0,0))
+	if(sign == 119)//w
+    {
+        switch(playerTurn)
+        {
+            case 1: moveByVector(new Vector(0,0,-0.1))
+            break;
+            case 2: moveByVector(new Vector(0.1,0,0))
+            break;
+            case 3: moveByVector(new Vector(0,0,0.1))
+            break;
+            case 4: moveByVector(new Vector(-0.1,0,0))
+            break;
+        }
+		
+    }
+	if(sign == 115)//s
+		{
+
+        }
+	if(sign == 100)//d
+    {
+        playerTurn++
+        if(playerTurn>4) playerTurn=1
+    }
+	if(sign == 97)//a
+		{
+            playerTurn--
+            if(playerTurn<1) playerTurn=4
+        }
+    if(sign == 32)//space
+        {
+                moveByVector(new Vector(0,0.1,0))
+        }
+
+
+
 }
 
 testAABBCollision = function(item, camera) {
