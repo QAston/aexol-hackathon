@@ -42,6 +42,14 @@ window.setup = function () {
         material: new Material({color:[0.9,0.91,1.0]}),
         mesh:Mesh.sphere().scaleUniform(100.0)
     })
+	var lastPosition = {x: 0, y: 0}
+	var sensitivity = 0.7
+	gl.canvas.addEventListener("mousemove", function(a) {
+		var x = a.movementX * sensitivity,
+			y = a.movementY * sensitivity
+		camera.yawStep = x;
+		camera.pitchStep = y;
+	})
     // teren
     worldboxes = []
     wSize = 5
@@ -72,7 +80,6 @@ window.setup = function () {
     agl.init();
     camera.position = new Vector(1.5,1.5,2.0);
     camera.rotation = new Vector(33.0,-33.0, 0);
-    camera.on(0.1)
     camera.setScene(world);
     classCreated = false
     objectList = [];
@@ -112,6 +119,44 @@ testPointCollision = function(boundingBox, point) {
 	point.z > boundingBox.min.z
 }
 
+moveByVector = function(vector) {
+	var futurePosition = new Vector(vector.x + camera.position.x, vector.y + camera.position.y,
+						vector.z + camera.position.z);
+	if(testFalling(futurePosition))
+		return
+	if(vector.z != 0)
+		camera.sideStep = camera.factor
+	camera.side(vector.x)
+}
+
+handleDownKeyboard = function(sign) {
+	console.log(sign)
+	if(sign == 87)
+		camera.forwardStep = camera.factor
+	if(sign == 83)
+		camera.forwardStep = -camera.factor
+	if(sign == 65)
+		camera.sideStep = camera.factor
+	if(sign == 68)
+		camera.sideStep = -camera.factor
+}
+
+handleUpKeyboard = function(sign) {
+	console.log(sign)
+	if(sign == 87)
+		camera.forwardStep = 0
+	if(sign == 83)
+		camera.forwardStep = 0
+	if(sign == 65)
+		camera.sideStep = 0	
+	if(sign == 68)
+		camera.sideStep = 0;
+}
+
+handleMouse = function(mouse) {
+	alert();
+}
+
 testAABBCollision = function(item, camera) {
 	return !(item.max.x <  camera.min.x ||
 		item.max.y < camera.min.y ||
@@ -119,10 +164,11 @@ testAABBCollision = function(item, camera) {
 		item.min.y > camera.max.y);
 }
 
+var cameraWidth = 0.05
 createCameraAABB = function(camera) {
 	var result = 
-			{max: new Vector(camera.x + 0.05, camera.y + 0.05, camera.z + 0.05),
-			min: new Vector(camera.x - 0.05, camera.y - 0.05, camera.z - 0.05)}
+			{max: new Vector(camera.x + cameraWidth, camera.y + cameraWidth, camera.z + cameraWidth),
+			min: new Vector(camera.x - cameraWidth, camera.y - cameraWidth, camera.z - cameraWidth)}
 	return result
 	}
 
@@ -133,6 +179,14 @@ testFalling = function(cameraPosition) {
 					result = true;
 			})
 	return !result;
+}
+
+window.onkeydown = function(e) {
+	handleDownKeyboard(e.which)
+}
+
+window.onkeyup = function(e) {
+	handleUpKeyboard(e.which)
 }
 
 dropVector = new Vector(0,-0.01,0)
