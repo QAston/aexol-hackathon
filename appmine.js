@@ -160,6 +160,9 @@ handleDownKeyboard = function(sign) {
 		camera.sideStep = camera.factor
 	if(sign == 68)
 		camera.sideStep = -camera.factor
+    if(sign == 32)
+        camera.updown(0.3)
+
 }
 
 handleUpKeyboard = function(sign) {
@@ -172,6 +175,8 @@ handleUpKeyboard = function(sign) {
 		camera.sideStep = 0	
 	if(sign == 68)
 		camera.sideStep = 0;
+    if(sign == 32)
+        camera.updown(0)
 }
 
 handleMouse = function(mouse) {
