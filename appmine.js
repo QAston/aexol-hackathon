@@ -9,7 +9,6 @@ window.setup = function () {
     var agl = new aexolGL();
     world = new Scene();
     camera = new Camera(1)
-    sceneGroup = new Group()
     shaderdiff2 = basicShader({useLights:true,useDiffuse:true})
     shaderdiff3 = basicShader({useLights:true})
     shaderSky = basicShader({})
@@ -39,7 +38,7 @@ window.setup = function () {
     boxMesh.setParent(mats)
     worldsphere = new GameObject(world,{
         shader:shaderSky,
-        material: new Material({color:[0.9,0.91,1.0]}),
+        material: new Material({color:[0.7,0.7,1.0]}),
         mesh:Mesh.sphere().scaleUniform(100.0)
     })
 	var lastPosition = {x: 0, y: 0}
@@ -83,37 +82,56 @@ window.setup = function () {
     camera.setScene(world);
     classCreated = false
     objectList = [];
-    LoadObjects(objectList);
+    loadObjects(objectList);
     console.log("SETUP");
     lastTime = gl.frame;
     gamePaused = false
 
 }
 
-LoadObject = function(name,position)
+loadObject = function(name,position,rotation)
 {
-    gObject = {}
-    gObject.stan = "ob"
-    gObject.enabled = 0
-        Mesh.obj("cube.obj",function(e){
-        boxMesh.setParent(mats)
-        BoxSolver.load(name+".json",function(e) {
-            gObject["boxSolver"] = e.reparent(boxMesh)
-            gObject["mesh"] = boxMesh
-            gObject.enabled += 1
-            gObject["go"] = new GameObject(world, {
-              shader: basicShader({}),
-              material: new Material({color:[0.9,0.91,1.0]}),
-              mesh: gObject["mesh"]})
-        })
-    })
-        return gObject
+  var gObject = {}
+  gObject.stan = "ob"
+  gObject.enabled = 0
+
+  BoxSolver.load(name+".json",function(e){
+    gObject.boxSolver = e.reparent(boxMesh)
+    gObject.boxSolver.object.move(position)
+    gObject.boxSolver.object.pivot = position
+    gObject.boxSolver.object.rotate(rotation,0,1,0)
+    gObject.enabled += 1
+  })
+
+  return gObject
 }
-LoadObjects = function(objectList)
+loadObjects = function(objectList)
 {
-objectList.push(LoadObject("Data/tree",new Vector(2.0,0.5,0.0)))
-objectList.push(LoadObject("Data/island1",new Vector(-5,0.0,0.0)))
-objectList.push(LoadObject("Data/island2",new Vector(2.0,0.0,0.0)))
+  Mesh.obj("cube.obj",function(e){
+    boxMesh = e.scaleUniform(0.1)
+    boxMesh.setParent(mats)
+    objectList.push(loadObject("Data/tree",new Vector(2.0,0.5,0.0),90))
+    objectList.push(loadObject("Data/island1",new Vector(-5,0.5,0.0),0))
+    objectList.push(loadObject("Data/island2",new Vector(2.0,0.0,0.0),90))
+    objectList.push(loadObject("Data/island2",new Vector(1.0,0.0,-1.0),90))
+    objectList.push(loadObject("Data/island2",new Vector(-0.5,0.0,2.0),90))
+    objectList.push(loadObject("Data/bridge",new Vector(-0.5,0.0,2.0),0))
+    objectList.push(loadObject("Data/island1",new Vector(-5.5,-0.7,3.2),0))
+    objectList.push(loadObject("Data/stairs",new Vector(-5.0,-0.5,2.1),-90))
+
+    objectList.push(loadObject("Data/bridge",new Vector(-2.2,0.0,2.5),90))
+    objectList.push(loadObject("Data/tree",new Vector(1.0,0.5,-1.0),0))
+    objectList.push(loadObject("Data/tree",new Vector(1.5,0.5,-1.0),0))
+    objectList.push(loadObject("Data/rock_medium",new Vector(0.3,0.2,-1.0),0))
+    objectList.push(loadObject("Data/rock_large",new Vector(-5,0.7,-0.5),0))
+    objectList.push(loadObject("Data/tree",new Vector(-4,1,-1.0),0))
+
+    objectList.push(loadObject("Data/bridge",new Vector(-5.5,-0.7,5.2),0))
+    objectList.push(loadObject("Data/island1",new Vector(-5.5,-0.7,7.2),0))
+    objectList.push(loadObject("Data/island1",new Vector(-6.5,-0.7,7.2),0))
+    objectList.push(loadObject("Data/house",new Vector(-5.5,-0.5,7.2),0))
+    objectList.push(loadObject("Data/tree",new Vector(-5.5,-0.0,5.6),0))
+  })
 }
 
 testPointCollision = function(boundingBox, point) {
@@ -161,7 +179,7 @@ createCameraAABB = function(camera, cameraWidth) {
 testCollision = function(cameraPosition, gravity) {
 	var result = false;
 	boxMesh.children.forEach(function(item) {
-				if(testAABBCollision(item.aabb, createCameraAABB(cameraPosition, gravity ? 0.2 : 0.1)))
+				if(testAABBCollision(item.aabb, createCameraAABB(cameraPosition, gravity ? 0.15 : 0.05)))
 					result = true;
 			})
 	return !result;
@@ -189,8 +207,8 @@ window.logic = function () {
     if (!object.enabled)
       return;
     updateAi(object, timeDiff);
-  })
 
+  })
 	performGravity()
 }
 window.draw = function () {
