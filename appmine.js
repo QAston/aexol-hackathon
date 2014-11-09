@@ -76,7 +76,7 @@ window.setup = function () {
 			}
 		}
 	}
-  
+
     agl.init();
     camera.position = new Vector(1.5,1.5,2.0);
     camera.rotation = new Vector(33.0,-33.0, 0);
@@ -89,27 +89,31 @@ window.setup = function () {
     gamePaused = false
 
 }
+
 LoadObject = function(name,position)
 {
-gObject = {}
+    gObject = {}
     gObject.stan = "ob"
-    gObject.loaded = 0
+    gObject.enabled = 0
         Mesh.obj("cube.obj",function(e){
-        boxMesh = e.scaleUniform(0.1)
         boxMesh.setParent(mats)
-        BoxSolver.load(name+".json",function(e){
-            gObject["body"] = e.reparent(boxMesh)
-            gObject["body"].object.move(position)
-            gObject.loaded += 1
+        BoxSolver.load(name+".json",function(e) {
+            gObject["boxSolver"] = e.reparent(boxMesh)
+            gObject["mesh"] = boxMesh
+            gObject.enabled += 1
+            gObject["go"] = new GameObject(world, {
+              shader: basicShader({}),
+              material: new Material({color:[0.9,0.91,1.0]}),
+              mesh: gObject["mesh"]})
         })
     })
         return gObject
 }
 LoadObjects = function(objectList)
 {
-objectList.push({go:LoadObject("Data/tree",new Vector(2.0,0.5,0.0)),})
-objectList.push({go:LoadObject("Data/island1",new Vector(-5,0.0,0.0)),})
-objectList.push({go:LoadObject("Data/island2",new Vector(2.0,0.0,0.0)),})
+objectList.push(LoadObject("Data/tree",new Vector(2.0,0.5,0.0)))
+objectList.push(LoadObject("Data/island1",new Vector(-5,0.0,0.0)))
+objectList.push(LoadObject("Data/island2",new Vector(2.0,0.0,0.0)))
 }
 
 testPointCollision = function(boundingBox, point) {
@@ -170,7 +174,7 @@ createCameraAABB = function(camera) {
 			{max: new Vector(camera.x + cameraWidth, camera.y + cameraWidth, camera.z + cameraWidth),
 			min: new Vector(camera.x - cameraWidth, camera.y - cameraWidth, camera.z - cameraWidth)}
 	return result
-	}
+}
 
 testFalling = function(cameraPosition) {
 	var result = false;
@@ -204,9 +208,11 @@ window.logic = function () {
   var timeDiff = newTime-lastTime;
   lastTime = newTime;
   objectList.forEach(function(object, index, array){
+    if (!object.enabled)
+      return;
     updateAi(object, timeDiff);
   })
-		
+
 		performGravity()
 }
 window.draw = function () {

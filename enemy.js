@@ -1,5 +1,6 @@
 AI = function(moveSpeed) {
-  this.moveSpeed = moveSpeed
+  this.moveSpeed = moveSpeed;
+  this.current_target = null;
 }
 
 Enemy = function(gameobj, ai) {
@@ -22,9 +23,13 @@ getNonCollidingNeighbours = function(go) {
 
 updateAi = function(obj, delta) {
   if (obj.hasOwnProperty("ai")) {
-    this.go.x += randomSign() *delta/1000 * this.ai.moveSpeed;
-    //this.go.y +=
-    //this.go.z +=
+    var ai = obj.ai;
+    if (_isNull(ai.current_target) || _.isEqual(nextTarget, ai.current_target)) {
+      var neighbours = getNonCollidingNeighbours(obj.go)
+      var nextTarget = neighbours[_.random(0, max)];
+      ai.current_target = nextTarget;
+    }
+    obj.position = ai.current_target;
   }
 }
 
