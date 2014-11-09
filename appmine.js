@@ -1,4 +1,4 @@
-var world, camera, gamePaused = true, jump,boxes,pointerBox, zajac,calyzajac,calyzajacMove, objectList, lastTime;
+var world, camera, gamePaused = true, jump,boxes,pointerBox,camera, zajac,calyzajac,calyzajacMove, objectList, lastTime;
 var pause = function () {
     gamePaused = !gamePaused
 }
@@ -124,41 +124,23 @@ testPointCollision = function(boundingBox, point) {
 }
 
 moveByVector = function(vector) {
-	var futurePosition = new Vector(vector.x + camera.position.x, vector.y + camera.position.y,
-						vector.z + camera.position.z);
-	if(testFalling(futurePosition))
-		return
-	if(vector.z != 0)
-		camera.sideStep = camera.factor
-	camera.side(vector.x)
+	var oldPosition = new Vector(camera.position.x, camera.position.y, camera.position.z)
+	camera.position = camera.position.add(vector)
+	if(!testCollision(camera.position)) {
+		camera.position = oldPosition
+	}
 }
 
 handleDownKeyboard = function(sign) {
 	console.log(sign)
-	if(sign == 87)
-		camera.forwardStep = camera.factor
-	if(sign == 83)
-		camera.forwardStep = -camera.factor
-	if(sign == 65)
-		camera.sideStep = camera.factor
-	if(sign == 68)
-		camera.sideStep = -camera.factor
-}
-
-handleUpKeyboard = function(sign) {
-	console.log(sign)
-	if(sign == 87)
-		camera.forwardStep = 0
-	if(sign == 83)
-		camera.forwardStep = 0
-	if(sign == 65)
-		camera.sideStep = 0	
-	if(sign == 68)
-		camera.sideStep = 0;
-}
-
-handleMouse = function(mouse) {
-	alert();
+	if(sign == 119)
+		moveByVector(new Vector(0,0,-0.1))
+	if(sign == 115)
+		moveByVector(new Vector(0,0,0.1))
+	if(sign == 100)
+		moveByVector(new Vector(0.1,0,0))
+	if(sign == 97)
+		moveByVector(new Vector(-0.1,0,0))
 }
 
 testAABBCollision = function(item, camera) {
@@ -168,35 +150,31 @@ testAABBCollision = function(item, camera) {
 		item.min.y > camera.max.y);
 }
 
-var cameraWidth = 0.05
-createCameraAABB = function(camera) {
+var cameraWidth = 0.07
+createCameraAABB = function(camera, cameraWidth) {
 	var result = 
 			{max: new Vector(camera.x + cameraWidth, camera.y + cameraWidth, camera.z + cameraWidth),
 			min: new Vector(camera.x - cameraWidth, camera.y - cameraWidth, camera.z - cameraWidth)}
 	return result
 }
 
-testFalling = function(cameraPosition) {
+testCollision = function(cameraPosition, gravity) {
 	var result = false;
 	boxMesh.children.forEach(function(item) {
-				if(testAABBCollision(item.aabb, createCameraAABB(cameraPosition)))
+				if(testAABBCollision(item.aabb, createCameraAABB(cameraPosition, gravity ? 0.2 : 0.1)))
 					result = true;
 			})
 	return !result;
 }
 
-window.onkeydown = function(e) {
-	handleDownKeyboard(e.which)
-}
-
-window.onkeyup = function(e) {
-	handleUpKeyboard(e.which)
+window.onkeypress = function(key) {
+	handleDownKeyboard(key.which)
 }
 
 dropVector = new Vector(0,-0.01,0)
 performGravity = function() {
-	if(testFalling(camera.position)) {
-		camera.position = camera.position.add(dropVector);
+	if(testCollision(camera.position, true)) {
+		camera.position = camera.position.add(dropVector)
 	}
 }
 
@@ -213,7 +191,7 @@ window.logic = function () {
     updateAi(object, timeDiff);
   })
 
-		performGravity()
+	performGravity()
 }
 window.draw = function () {
     world.draw(camera);
